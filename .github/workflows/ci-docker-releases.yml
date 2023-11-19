@@ -20,7 +20,7 @@ jobs:
 
       - name: "Set current date as env variable"
         run: |
-          ghref = "${{ github.ref }}"
+          ghref="${{ github.ref }}"
           echo "branchName=${ghref//refs\/heads\/releases\//}"
           echo "buildyear=$(date +'%Y')" >> $GITHUB_ENV
           echo "builddate=$(date +'%m%d%H%M')" >> $GITHUB_ENV
