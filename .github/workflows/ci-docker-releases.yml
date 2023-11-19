@@ -1,10 +1,10 @@
-name: ci-docker
+name: ci-docker-releases
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "releases/**" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "releases/**" ]
 jobs:
   build-push:
 
@@ -17,6 +17,13 @@ jobs:
 
       - name: Display build info
         run: echo ${{ github.actor }}, ${{ github.env }}, ${{ github.ref }}
+
+      - name: "Set current date as env variable"
+        run: |
+          ghref="${{ github.ref }}"
+          echo "branchName=${ghref//refs\/heads\/releases\//}" >> $GITHUB_ENV
+          echo "buildyear=$(date +'%Y')" >> $GITHUB_ENV
+          echo "builddate=$(date +'%m%d%H%M')" >> $GITHUB_ENV
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -33,4 +40,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_REPO }}:latest
+          tags: ${{ secrets.DOCKERHUB_REPO }}:${{ env.branchName }}, ${{ secrets.DOCKERHUB_REPO }}:${{ env.branchName }}-${{ env.buildyear }}-${{ env.builddate }}
