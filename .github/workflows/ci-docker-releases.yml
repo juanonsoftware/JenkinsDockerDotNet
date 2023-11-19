@@ -20,6 +20,8 @@ jobs:
 
       - name: "Set current date as env variable"
         run: |
+          $branchName = "${{ github.ref }}".Split("/")["${{ github.ref }}".Split("/").Length -1]
+          echo "branchName=$branchName"
           echo "buildyear=$(date +'%Y')" >> $GITHUB_ENV
           echo "builddate=$(date +'%m%d%H%M')" >> $GITHUB_ENV
 
@@ -37,5 +39,5 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          push: false
-          tags: ${{ secrets.DOCKERHUB_REPO }}:latest, ${{ secrets.DOCKERHUB_REPO }}:v6-${{ env.buildyear }}-${{ env.builddate }}
+          push: true
+          tags: ${{ secrets.DOCKERHUB_REPO }}:${{ env.branchName }}, ${{ secrets.DOCKERHUB_REPO }}:${{ env.branchName }}-${{ env.buildyear }}-${{ env.builddate }}
