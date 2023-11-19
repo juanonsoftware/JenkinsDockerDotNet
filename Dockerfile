@@ -17,6 +17,8 @@ RUN wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod
 	
 # Install .NET SDK(s)
 RUN apt update && apt install -y dotnet-sdk-6.0
+RUN apt update && apt install -y dotnet-sdk-7.0
+RUN apt update && apt install -y dotnet-sdk-8.0
 
 # Switch back to jenkins user
 USER jenkins
